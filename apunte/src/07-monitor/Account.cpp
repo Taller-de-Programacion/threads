@@ -1,4 +1,4 @@
-#include "AccountBad.h"
+#include "Account.h"
 
 Account::Account() {
   this->balance = 0;
@@ -14,12 +14,4 @@ void Account::deposit(int amount) {
 
 int Account::getBalance() const {
 	return this->balance;
-}
-
-void Account::lock() {
-	this->mutex.lock();
-}
-
-void Account::unlock() {
-	this->mutex.unlock();
 }

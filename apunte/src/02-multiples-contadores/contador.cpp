@@ -22,21 +22,27 @@ private:
 
 int main (int argc, char** argv) {
 	std::vector<CharCounter> counters;
-	std::vector<std::thread*> threads;
+	std::vector<std::thread> threads;
 	
+	/**
+	 * Creo N contadores para cada archivo
+	 */
 	counters.reserve(argc);
 	for (int i = 0; i < argc-1; ++i){
 		counters.push_back(CharCounter(argv[i+1], 'a'));
 	}
 	
+	/**
+	 * 
+	 */
 	for (unsigned int i = 0; i < (counters.size()); ++i){
-		std::thread *t = new std::thread(std::ref(counters[i]));
-		threads.push_back(t);
+		threads.push_back(std::thread(std::ref(counters[i])));
 	}
 	printf("Llamando a join\n");
 	for (unsigned int i = 0; i < (counters.size()); ++i){
-		threads[i]->join();
-		delete threads[i];
+		//threads[i]->join();
+		threads[i].join();
+		//delete threads[i];
 	}
 	int finalResult = 0;
 	for (unsigned int i = 0; i < (counters.size()); ++i){
@@ -49,8 +55,8 @@ int main (int argc, char** argv) {
 
 /**
  * Función a correr en paralelo
+ * Sobrecargo el operador "()", convirtiendo a mi objeto en un *functor*
  */
-
 void CharCounter::operator() () {
 	printf("Busco '%c' sobre %s\n", this->countChar, this->filename.c_str());
 	FILE* fd = fopen(this->filename.c_str(), "r");
@@ -60,7 +66,7 @@ void CharCounter::operator() () {
 			this->result++;
 		}
 	}
-        fclose(fd);
+	fclose(fd);
 }
 
 CharCounter::CharCounter(const char* filename, char countChar) :

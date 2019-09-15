@@ -2,37 +2,40 @@
 #include <stdio.h>
 #include <unistd.h>
 
+// Struct con los parámetros que le paso a mi función concurrente
 struct printer_param_t {
 	int times;
 	char* str;
 };
 
+// Función que correrá de forma concurrente
 void* printString(void* printerParam) {
     struct printer_param_t *param = (struct printer_param_t *) printerParam;
     for (int i = 0; i < param->times; ++i) {
         printf("[%d] str: %s\n", i, param->str);
-        sleep(1);
+	sleep(1);
     }
 }
 
 int main (int argc, char** argv) {
-    struct printer_param_t thParams, mainParams;
-    // No abusen de los TDAs
-    thParams.times = 5;
-    thParams.str = "Hola posix threads, soy un hilo";
-    mainParams.times = 3;
-    mainParams.str = "Hola posix threads, soy main";
-    
+    // Inicializo los parámetros
+    struct printer_param_t printParams;
+    printParams.times = 5;
+    printParams.str = "Hola posix threads!";
+
     printf("Creando un thread\n");
     pthread_t printThread;
-    // Imprimo desde un hilo
-    pthread_create(&printThread, 0, printString, &thParams);
+    pthread_create(&printThread, 0, printString, &printParams);
 
-    // Tambien imprimo desde main
-    printString(&mainParams);
-    
+
+    struct printer_param_t printParams2;
+    printParams2.times = 3;
+    printParams2.str = "Hola, soy Main";
+
+    printString(&printParams2);
+
+    // Espero a que termine el hilo lanzado
     printf("Haciendo el join\n");
-    // Espero a que printThread haya terminado
     pthread_join(printThread, 0);
     printf("Joined!\n");
 }

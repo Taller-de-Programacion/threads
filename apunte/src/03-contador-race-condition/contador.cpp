@@ -2,29 +2,33 @@
 #include <vector>
 #include <string>
 #include <thread>
-#include <mutex>
 
 class CharCounter {
 public:
-	CharCounter(const char* filename, char countChar,
-				int& result, std::mutex& mutex);
+	CharCounter(const char* filename, char countChar, int& result);
 	void operator()();
 	void printResult() const;
 private:
 	std::string filename;
 	char countChar;
 	int& result;
-	std::mutex& mutex;
 };
+
+
+/**
+ * Demo3: Se instancian N counters, esta vez se utiliza un único
+ * contador para los resultados, pero al no estar protegido
+ * falla el conteo
+ */
+
 
 int main (int argc, char** argv) {
 	std::vector<CharCounter> counters;
 	int finalResult = 0;
-	std::mutex mutex;
 	std::vector<std::thread*> threads;
 	
 	for (int i = 1; i < argc; ++i){
-		counters.push_back(CharCounter(argv[i], 'a', finalResult, mutex));
+		counters.push_back(CharCounter(argv[i], 'a', finalResult));
 	}
 	
 	for (unsigned int i = 0; i < (counters.size()); ++i){
@@ -44,18 +48,13 @@ void CharCounter::operator() () {
 	char readChar;
 	while (fread(&readChar, 1, 1, fd)){
 		if (readChar == this->countChar) {
-			mutex.lock();
 			this->result++;
-			mutex.unlock();
 		}
 	}
-        fclose(fd);
 }
 
-CharCounter::CharCounter(const char* filename, char countChar,
-						 int& result, std::mutex& mutex) :
-	filename(filename), countChar(countChar),
-	result(result), mutex(mutex){}
+CharCounter::CharCounter(const char* filename, char countChar, int& result) :
+	filename(filename), countChar(countChar), result(result){}
 
 void CharCounter::printResult() const {
 	printf("%s tiene %d letras '%c'\n", this->filename.c_str(), this->countChar, this->result);

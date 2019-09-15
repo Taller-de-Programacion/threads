@@ -1,4 +1,4 @@
-# Comandos
+# Threads
 
 ## Compilar
 
@@ -17,19 +17,21 @@ make
 
 ## Aplicaciones
 
-* *threads-c*: Ejemplo de threads POSIX en C
+* *00-threads-c*: Ejemplo de threads POSIX en C.
 
-* *contador-01*: Contador de letras secuencial
+* *01-contador*: Contador de letras secuencial.
 
-* *contador-02*: Contador de letras multihilo
+* *02-contador*: Contador de letras multihilo.
 
-* *contador-03*: Contador de letras, con race-condition
+* *03-contador*: Contador de letras, con race-condition.
 
-* *contador-04*: Contador de letras sincronizado
+* *04-contador*: Contador de letras sincronizado.
 
-* *deadlock*: Ejemplo de deadlock
+* *05-deadlock*: Ejemplo de deadlock.
 
-* *not-deadlock*: Solución al problema de deadlock anterior
+* *06-not-deadlock*: Solución al problema de deadlock anterior.
+
+* *07-monitor*: Ejemplo de monitor.
 
 * *random-gen*: generador de texto aleatorio
 
@@ -39,5 +41,5 @@ make
 ~~~{.bash}
 # deberias estar posicionado en la carpeta build
 ./random-gen 1200400
-time ./contador-01 random.txt
+time ./01-contador random.txt
 ~~~

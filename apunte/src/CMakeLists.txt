@@ -1,20 +1,51 @@
-project(concurso)
+project(threads)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wall -Werror -pedantic -pedantic-errors")
 
-add_executable(threads-c threads-c.c)
-add_executable(contador-01 contador-01.cpp)
-add_executable(contador-02 contador-02.cpp)
-add_executable(contador-03 contador-03.cpp)
-add_executable(contador-04 contador-04.cpp)
-add_executable(deadlock deadlock.cpp AccountBad.cpp)
-add_executable(not-deadlock deadlock-ok.cpp Account.cpp Lock.cpp)
+add_executable(00-threads-c
+  00-threads-posix-c/threads-c.c
+)
 
-add_executable(random-gen random-gen.cpp)
+add_executable(01-contador
+  01-contador-single-thread/contador.cpp
+)
 
-target_link_libraries(threads-c pthread)
-target_link_libraries(contador-02 pthread)
-target_link_libraries(contador-03 pthread)
-target_link_libraries(contador-04 pthread)
-target_link_libraries(deadlock pthread)
-target_link_libraries(not-deadlock pthread)
+add_executable(02-contador
+  02-multiples-contadores/contador.cpp
+)
+
+add_executable(02b-contador
+  02b-multiples-contadores-alt/contador.cpp
+  02b-multiples-contadores-alt/CounterThread.cpp
+  02b-multiples-contadores-alt/Thread.cpp
+)
+
+add_executable(03-contador 03-contador-race-condition/contador.cpp)
+
+add_executable(04-contador 04-contador-protegido/contador.cpp)
+
+add_executable(05-deadlock
+  05-transacciones-deadlock/main.cpp
+  05-transacciones-deadlock/Account.cpp
+)
+
+add_executable(06-not-deadlock
+  06-transacciones-ok/main.cpp
+  06-transacciones-ok/Account.cpp
+  06-transacciones-ok/Lock.cpp
+)
+
+add_executable(07-monitor
+  07-monitor/main.cpp
+  07-monitor/Account.cpp
+  07-monitor/AccountMonitor.cpp
+)
+
+target_link_libraries(00-threads-c pthread)
+target_link_libraries(02-contador pthread)
+target_link_libraries(02b-contador pthread)
+target_link_libraries(03-contador pthread)
+target_link_libraries(04-contador pthread)
+target_link_libraries(05-deadlock pthread)
+target_link_libraries(06-not-deadlock pthread)
+target_link_libraries(07-monitor pthread)
