@@ -33,7 +33,8 @@ int main (int argc, char** argv) {
 	}
 	
 	/**
-	 * 
+	 * Estoy instanciando un thread en la memoria del vector
+	 * std::ref es para mandarle como parámetro una referencia al contador
 	 */
 	for (unsigned int i = 0; i < (counters.size()); ++i){
 		threads.push_back(std::thread(std::ref(counters[i])));
